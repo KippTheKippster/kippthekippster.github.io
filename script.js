@@ -22,9 +22,9 @@ socket.addEventListener('error', (error) => {
 // Gyro
 
 function onOrientation(data) {
-    gyro.orientation.alpha += data.alpha
-    gyro.orientation.beta += data.beta
-    gyro.orientation.gamma += data.gamma
+    gyro.orientation.alpha = data.alpha
+    gyro.orientation.beta = data.beta
+    gyro.orientation.gamma = data.gamma
 
     document.getElementById("x").innerHTML = gyro.orientation.alpha.toFixed(3)
     document.getElementById("y").innerHTML = gyro.orientation.beta.toFixed(3)
