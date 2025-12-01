@@ -26,10 +26,12 @@ function onOrientation(data) {
     gyro.orientation.beta = data.beta
     gyro.orientation.gamma = data.gamma
 
-    document.getElementById("x").innerHTML = gyro.orientation.alpha.toFixed(3)
-    document.getElementById("y").innerHTML = gyro.orientation.beta.toFixed(3)
-    document.getElementById("z").innerHTML = gyro.orientation.gamma.toFixed(3)
-    let message = gyro.orientation.alpha + ";" + gyro.orientation.beta + ";" + gyro.orientation.gamma
+    let orientation = gyro.getCorrectedOrientation()
+
+    document.getElementById("x").innerHTML = orientation.alpha.toFixed(3)
+    document.getElementById("y").innerHTML = orientation.beta.toFixed(3)
+    document.getElementById("z").innerHTML = orientation.gamma.toFixed(3)
+    let message = orientation.alpha + ";" + orientation.beta + ";" + orientation.gamma
     socket.send(message)
 }
 
@@ -42,12 +44,26 @@ gyro.orientation = {
     gamma: 0.0
 }
 
+gyro.offset = {
+    alpha: 0.0,
+    beta: 0.0,
+    gamma: 0.0
+}
+
 gyro.resetOrientation = function() {
     log("Reseting")
-    gyro.orientation = {
-        alpha: 0.0,
-        beta: 0.0,
-        gamma: 0.0
+    gyro.offset = {
+        alpha: -gyro.orientation.alpha,
+        beta: -gyro.orientation.beta,
+        gamma: -gyro.orientation.gamma
+    }
+}
+
+gyro.getCorrectedOrientation = function() {
+    return {
+        alpha: gyro.orientation.alpha + gyro.offset.alpha,
+        beta: gyro.orientation.beta + gyro.offset.beta,
+        gamma: gyro.orientation.gamma + gyro.offset.gamma
     }
 }
 
