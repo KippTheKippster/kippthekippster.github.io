@@ -22,7 +22,8 @@ socket.addEventListener('error', (error) => {
 // Gyro
 
 function onOrientation(data) {
-    log(data)
+    const acc = data.acceleration
+    log([acc.x, acc.y, acc.z])
 }
 
 // --Gyroscope--
