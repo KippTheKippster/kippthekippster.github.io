@@ -23,15 +23,35 @@ socket.addEventListener('error', (error) => {
 
 function onOrientation(data) {
     const acc = data.acceleration
-    document.getElementById("x").innerHTML = acc.x.toFixed(3)
-    document.getElementById("y").innerHTML = acc.y.toFixed(3)
-    document.getElementById("z").innerHTML = acc.z.toFixed(3)
-    let message = acc.x + ";" + acc.y + ";" + acc.z
+
+    gyro.orientation.x += acc.x
+    gyro.orientation.y += acc.y
+    gyro.orientation.z += acc.z
+
+    document.getElementById("x").innerHTML = gyro.orientation.x.toFixed(3)
+    document.getElementById("y").innerHTML = gyro.orientation.y.toFixed(3)
+    document.getElementById("z").innerHTML = gyro.orientation.z.toFixed(3)
+    let message = gyro.orientation.x + ";" + gyro.orientation.y + ";" + gyro.orientation.z
     socket.send(message)
 }
 
 // --Gyroscope--
 var gyro = {}
+
+gyro.orientation = {
+    x: 0.0,
+    y: 0.0,
+    z: 0.0
+}
+
+gyro.resetOrientation = function() {
+    log("Reseting")
+    gyro.orientation = {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0
+    }
+}
 
 //https://trekhleb.dev/blog/2021/gyro-web/
 gyro.addOrientationListener = function(listener) {
@@ -69,6 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
     textArea = document.getElementById("debug-text-area")
     textArea.value = ""
 
+    const resetGyro = document.getElementById("reset-gyro")
+    resetGyro.addEventListener("click", function() {
+        gyro.resetOrientation()
+    })
+
     gyro.addOrientationListener(onOrientation)
-    onOrientation({acceleration: {x: 20.032131231, y:13.03125435634643, z:-20.0543654654}})
+    //onOrientation({acceleration: {x: 20.032131231, y:13.03125435634643, z:-20.0543654654}})
 })
