@@ -26,7 +26,8 @@ function onOrientation(data) {
     document.getElementById("x").innerHTML = acc.x.toFixed(3)
     document.getElementById("y").innerHTML = acc.y.toFixed(3)
     document.getElementById("z").innerHTML = acc.z.toFixed(3)
-    socket.send(toString(acc.x) + ";" + toString(acc.y) + ";" + toString(acc.z))
+    let message = acc.x + ";" + acc.y + ";" + acc.z
+    socket.send(message)
 }
 
 // --Gyroscope--
