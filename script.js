@@ -22,16 +22,14 @@ socket.addEventListener('error', (error) => {
 // Gyro
 
 function onOrientation(data) {
-    const acc = data.acceleration
+    gyro.orientation.alpha += data.alpha
+    gyro.orientation.beta += data.beta
+    gyro.orientation.gamma += data.gamma
 
-    gyro.orientation.x += acc.x
-    gyro.orientation.y += acc.y
-    gyro.orientation.z += acc.z
-
-    document.getElementById("x").innerHTML = gyro.orientation.x.toFixed(3)
-    document.getElementById("y").innerHTML = gyro.orientation.y.toFixed(3)
-    document.getElementById("z").innerHTML = gyro.orientation.z.toFixed(3)
-    let message = gyro.orientation.x + ";" + gyro.orientation.y + ";" + gyro.orientation.z
+    document.getElementById("x").innerHTML = gyro.orientation.alpha.toFixed(3)
+    document.getElementById("y").innerHTML = gyro.orientation.beta.toFixed(3)
+    document.getElementById("z").innerHTML = gyro.orientation.gamma.toFixed(3)
+    let message = gyro.orientation.alpha + ";" + gyro.orientation.beta + ";" + gyro.orientation.gamma
     socket.send(message)
 }
 
@@ -39,17 +37,17 @@ function onOrientation(data) {
 var gyro = {}
 
 gyro.orientation = {
-    x: 0.0,
-    y: 0.0,
-    z: 0.0
+    alpha: 0.0,
+    beta: 0.0,
+    gamma: 0.0
 }
 
 gyro.resetOrientation = function() {
     log("Reseting")
     gyro.orientation = {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0
+        alpha: 0.0,
+        beta: 0.0,
+        gamma: 0.0
     }
 }
 
@@ -60,7 +58,7 @@ gyro.addOrientationListener = function(listener) {
         DeviceMotionEvent.requestPermission()
             .then((state) => {
                 if (state === 'granted') {
-                    window.addEventListener('devicemotion', listener);
+                    window.addEventListener('deviceorientation', listener);
                 } else {
                     console.error('Request to access the orientation was rejected');
                 }
@@ -68,7 +66,7 @@ gyro.addOrientationListener = function(listener) {
             .catch(console.error);
     } else {
         // Handle regular non iOS 13+ devices.
-        window.addEventListener('devicemotion', listener);
+        window.addEventListener('deviceorientation', listener);
     }
 }
 
@@ -95,5 +93,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     gyro.addOrientationListener(onOrientation)
-    //onOrientation({acceleration: {x: 20.032131231, y:13.03125435634643, z:-20.0543654654}})
+    onOrientation({alpha: 20.032131231, beta:13.03125435634643, gamma:-20.0543654654})
 })
