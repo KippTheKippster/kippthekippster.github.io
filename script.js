@@ -23,7 +23,9 @@ socket.addEventListener('error', (error) => {
 
 function onOrientation(data) {
     const acc = data.acceleration
-    log([acc.x, acc.y, acc.z])
+    document.getElementById("x").innerHTML = acc.x.toFixed(3)
+    document.getElementById("y").innerHTML = acc.y.toFixed(3)
+    document.getElementById("z").innerHTML = acc.z.toFixed(3)
 }
 
 // --Gyroscope--
@@ -66,4 +68,5 @@ document.addEventListener("DOMContentLoaded", () => {
     textArea.value = ""
 
     gyro.addOrientationListener(onOrientation)
+    onOrientation({acceleration: {x: 20.032131231, y:13.03125435634643, z:-20.0543654654}})
 })
