@@ -31,8 +31,7 @@ function onOrientation(data) {
     document.getElementById("x").innerHTML = orientation.alpha.toFixed(3)
     document.getElementById("y").innerHTML = orientation.beta.toFixed(3)
     document.getElementById("z").innerHTML = orientation.gamma.toFixed(3)
-    let message = orientation.alpha + ";" + orientation.beta + ";" + orientation.gamma
-    socket.send(message)
+    socket.send(orientation)
 }
 
 // --Gyroscope--
