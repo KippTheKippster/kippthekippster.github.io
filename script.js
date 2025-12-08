@@ -111,8 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function onOrientation(data) {
-        log(data, socket)
-
         gyro.orientation.alpha = data.alpha
         gyro.orientation.beta = data.beta
         gyro.orientation.gamma = data.gamma
@@ -127,7 +125,5 @@ document.addEventListener("DOMContentLoaded", () => {
     function sendTimeout() {
         let orientation = gyro.getCorrectedOrientation()
         socket.send([orientation.alpha, orientation.beta, orientation.gamma])
-        console.log("OH NO!")
     }
-    //onOrientation({alpha: 20.032131231, beta:13.03125435634643, gamma:-20.0543654654})
 })
