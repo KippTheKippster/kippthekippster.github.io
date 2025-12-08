@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     function sendTimeout() {
         let orientation = gyro.getCorrectedOrientation()
-        socket.send([orientation.alpha, orientation.beta, orientation.gamma])
+        //socket.send([orientation.alpha, orientation.beta, orientation.gamma])
+        let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3)
+        socket.send()
     }
 })
