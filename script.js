@@ -1,29 +1,30 @@
 const startUrl = 'https://thomasina-childly-garnett.ngrok-free.dev/'
 
+let socket
+
+let textArea = null
+let urlInput = null
+
 function startSocket(url) {
-    const socket = new WebSocket(url); 
-
-    let textArea = null
-    let urlInput = null
-
+    let newSocket = new WebSocket(url); 
     console.log("Loading...")
 
     // Event listener for connection open
-    socket.addEventListener('open', (event) => {
+    newSocket.addEventListener('open', (event) => {
         log('Connected to WebSocket server!');
     });
 
     // Event listener for WebSocket close
-    socket.addEventListener('close', (event) => {
+    newSocket.addEventListener('close', (event) => {
         log('WebSocket connection closed:', event);
     });
 
     // Event listener for error
-    socket.addEventListener('error', (error) => {
+    newSocket.addEventListener('error', (error) => {
         log('WebSocket error:', error);
     });
 
-    return socket
+    return newSocket
 }
 
 // --Gyroscope--
@@ -77,19 +78,6 @@ gyro.addOrientationListener = function(listener) {
     }
 }
 
-function onOrientation(data, socket) {
-    gyro.orientation.alpha = data.alpha
-    gyro.orientation.beta = data.beta
-    gyro.orientation.gamma = data.gamma
-
-    let orientation = gyro.getCorrectedOrientation()
-
-    document.getElementById("x").innerHTML = orientation.alpha.toFixed(3)
-    document.getElementById("y").innerHTML = orientation.beta.toFixed(3)
-    document.getElementById("z").innerHTML = orientation.gamma.toFixed(3)
-    socket.send([orientation.alpha, orientation.beta, orientation.gamma])
-}
-
 function log(...data) {
     if (textArea != null) {
         data.forEach(element => {
@@ -116,7 +104,23 @@ document.addEventListener("DOMContentLoaded", () => {
         gyro.resetOrientation()
     })
 
-    const socket = startSocket(urlInput.value);
-    gyro.addOrientationListener(onOrientation.bind(socket))
+    socket = startSocket(urlInput.value);
+    gyro.addOrientationListener(onOrientation)
+
+
+    function onOrientation(data) {
+        log(data, socket)
+
+        gyro.orientation.alpha = data.alpha
+        gyro.orientation.beta = data.beta
+        gyro.orientation.gamma = data.gamma
+
+        let orientation = gyro.getCorrectedOrientation()
+
+        document.getElementById("x").innerHTML = orientation.alpha.toFixed(3)
+        document.getElementById("y").innerHTML = orientation.beta.toFixed(3)
+        document.getElementById("z").innerHTML = orientation.gamma.toFixed(3)
+        socket.send([orientation.alpha, orientation.beta, orientation.gamma])
+    }
     //onOrientation({alpha: 20.032131231, beta:13.03125435634643, gamma:-20.0543654654})
 })
