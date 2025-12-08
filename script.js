@@ -91,6 +91,12 @@ function log(...data) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    let sendDelay = 50
+
+    let sendDelayInput = document.getElementById("send-delay")
+
+    sendDelay = sendDelayInput.value
+
     urlInput = document.getElementById("url-input")
     if (urlInput.value == "") {
         urlInput.value = startUrl
@@ -107,8 +113,14 @@ document.addEventListener("DOMContentLoaded", () => {
     socket = startSocket(urlInput.value);
     gyro.addOrientationListener(onOrientation)
 
-    setInterval(sendTimeout, 200)
+    let sendInterval = setInterval(sendTimeout, sendDelay)
 
+    sendDelayInput.addEventListener("change", function() {
+        clearInterval(sendInterval)
+        sendDelay = sendDelayInput.value
+        sendInterval = setInterval(sendTimeout, sendDelay)
+        log()
+    })
 
     function onOrientation(data) {
         gyro.orientation.alpha = data.alpha
