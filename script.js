@@ -107,6 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
     socket = startSocket(urlInput.value);
     gyro.addOrientationListener(onOrientation)
 
+    setInterval(sendTimeout, 200)
+
 
     function onOrientation(data) {
         log(data, socket)
@@ -120,7 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("x").innerHTML = orientation.alpha.toFixed(3)
         document.getElementById("y").innerHTML = orientation.beta.toFixed(3)
         document.getElementById("z").innerHTML = orientation.gamma.toFixed(3)
+    }
+    
+    function sendTimeout() {
+        let orientation = gyro.getCorrectedOrientation()
         socket.send([orientation.alpha, orientation.beta, orientation.gamma])
+        console.log("OH NO!")
     }
     //onOrientation({alpha: 20.032131231, beta:13.03125435634643, gamma:-20.0543654654})
 })
