@@ -5,6 +5,8 @@ let socket
 let textArea = null
 let urlInput = null
 
+let shootIndex = 0; // Shoot index will increment when clicked (up to 9 and reset) this is to not have to send a message every time the button is pressed
+
 function startSocket(url) {
     let newSocket = new WebSocket(url); 
     console.log("Loading...")
@@ -106,9 +108,16 @@ document.addEventListener("DOMContentLoaded", () => {
     textArea = document.getElementById("debug-text-area")
     textArea.value = ""
 
-    const resetGyro = document.getElementById("reset-gyro")
-    resetGyro.addEventListener("click", function() {
+    const resetGyroButton = document.getElementById("reset-gyro")
+    resetGyroButton.addEventListener("click", function() {
         gyro.resetOrientation()
+    })
+
+    const shootButton = document.getElementById("shoot")
+    shootButton.addEventListener("mousedown", function() {
+        shooting = shootIndex
+        shootIndex += 1
+        shootIndex %= 10
     })
 
     socket = startSocket(urlInput.value);
@@ -138,7 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function sendTimeout() {
         let orientation = gyro.getCorrectedOrientation()
         //socket.send([orientation.alpha, orientation.beta, orientation.gamma])
-        let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3)
+        let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3) + ";" + shootIndex.toString();
+        log(message)
         socket.send(message)
     }
 })
