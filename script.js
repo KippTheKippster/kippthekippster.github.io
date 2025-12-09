@@ -129,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(sendInterval)
         sendDelay = sendDelayInput.value
         sendInterval = setInterval(sendTimeout, sendDelay)
-        log()
     })
 
     function onOrientation(data) {
@@ -148,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let orientation = gyro.getCorrectedOrientation()
         //socket.send([orientation.alpha, orientation.beta, orientation.gamma])
         let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3) + ";" + shootIndex.toString();
-        log(message)
         socket.send(message)
     }
 })
