@@ -12,6 +12,7 @@ function startSocket(url) {
     // Event listener for connection open
     newSocket.addEventListener('open', (event) => {
         log('Connected to WebSocket server!');
+        newSocket.send("add")
     });
 
     // Event listener for WebSocket close
