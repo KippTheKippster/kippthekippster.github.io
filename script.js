@@ -105,9 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
     fullscreenButton.addEventListener("click", function()  {
         if (document.fullscreenElement) {
             document.exitFullscreen()
+            window.screen.orientation.unlock()
         }
         else {
             document.documentElement.requestFullscreen();
+            window.screen.orientation.lock("portrait")
         }
     })
 
