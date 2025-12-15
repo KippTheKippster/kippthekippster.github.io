@@ -4,6 +4,7 @@ let socket
 
 let textArea = null
 let urlInput = null
+let fullscreenButton = null
 
 let shootIndex = 0; // Shoot index will increment when clicked (up to 9 and reset) this is to not have to send a message every time the button is pressed
 
@@ -100,6 +101,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sendDelay = sendDelayInput.value
 
+    fullscreenButton = document.getElementById("fullscreen")
+    fullscreenButton.addEventListener("click", function()  {
+        if (document.fullscreenElement) {
+            document.exitFullscreen()
+        }
+        else {
+            document.documentElement.requestFullscreen();
+        }
+    })
+
     urlInput = document.getElementById("url-input")
     if (urlInput.value == "") {
         urlInput.value = startUrl
@@ -146,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function sendTimeout() {
         let orientation = gyro.getCorrectedOrientation()
         //socket.send([orientation.alpha, orientation.beta, orientation.gamma])
-        let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3) + ";" + shootIndex.toString();
+        let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3) + ";" + shootIndex;
         socket.send(message)
     }
 })
