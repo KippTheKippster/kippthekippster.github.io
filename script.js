@@ -1,4 +1,4 @@
-const startUrl = 'https://thomasina-childly-garnett.ngrok-free.dev/'
+const startUrl = 'http://karlkostoulas.se:6969'
 
 let socket
 
