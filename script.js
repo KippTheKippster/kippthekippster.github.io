@@ -1,4 +1,4 @@
-const startUrl = 'http://karlkostoulas.se:6969'
+const startUrl = 'wss://karlkostoulas.se:6969'
 
 let socket
 
