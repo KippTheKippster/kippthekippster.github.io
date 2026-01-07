@@ -10,3 +10,11 @@ body {
     width: 256px;
     height: 256px;
 }
+
+.hide {
+    visibility: hidden;
+}
+
+.no-select {
+    user-select: none;
+}

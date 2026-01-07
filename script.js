@@ -16,6 +16,7 @@ function startSocket(url) {
     newSocket.addEventListener('open', (event) => {
         log('Connected to WebSocket server!');
         newSocket.send("add")
+        textArea.style.visibility = "hidden"
     });
 
     // Event listener for WebSocket close
