@@ -2,6 +2,7 @@ const startUrl = 'wss://karlkostoulas.se:6969'
 
 let socket
 
+
 let textArea = null
 let urlInput = null
 let fullscreenButton = null
@@ -95,7 +96,29 @@ function log(...data) {
     console.log(data)
 }
 
+function getRandomColor() {
+  var letters = '0123456789abcdef';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+let sentUserData = false
+
 document.addEventListener("DOMContentLoaded", () => {
+    let username = sessionStorage.getItem("name")
+    let usercolor = sessionStorage.getItem("color")
+    if (username === null || username === "") {
+        username = "Player" + Math.ceil(Math.random() * 1000000000);
+    }
+
+    if (usercolor === null) {
+        usercolor = getRandomColor()
+    }
+
+
     let sendDelay = 50
 
     let sendDelayInput = document.getElementById("send-delay")
@@ -135,6 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     socket = startSocket(urlInput.value);
+
+
     gyro.addOrientationListener(onOrientation)
 
     let sendInterval = setInterval(sendTimeout, sendDelay)
@@ -158,6 +183,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     function sendTimeout() {
+        if (sentUserData == false) {
+            socket.send("u" + username + ";" + usercolor)
+            sentUserData = true
+        }
+
         let orientation = gyro.getCorrectedOrientation()
         //socket.send([orientation.alpha, orientation.beta, orientation.gamma])
         let message = orientation.alpha.toFixed(3) + ";" + orientation.beta.toFixed(3) + ";" + orientation.gamma.toFixed(3) + ";" + shootIndex;
